@@ -10,11 +10,11 @@ For now, adding the the following to your `composer.json` file will (have to) do
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/EVODelavega/activecampaign-api-php.git"
+            "url": "https://github.com/ravimadan86/activecampaign-api-php.git"
         }
     ],
     "require": {
-        "EVODelavega/activecampaign-api-php": "dev-master"
+        "ravimadan/activecampaign-api-php": "dev-master"
     }
 ```
 

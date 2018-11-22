@@ -1,12 +1,12 @@
 {
-    "name": "evodelavega/activecampaign-api-php",
+    "name": "ravimadan/activecampaign-api-php",
     "description": "An alternative, more PSR-compliant AC API wrapper",
     "license": "MIT",
     "keywords": ["activecampaign", "email-marketing", "newsletter", "marketing-automation", "subscribe", "forms", "emails", "automation"],
     "authors": [
         {
-            "name": "Elias Van Ootegem",
-            "role": "Developer"
+            "name": "Ravi Madan",
+            "email": "ravimadan86@gmail.com"
         }
     ],
     "autoload": {
