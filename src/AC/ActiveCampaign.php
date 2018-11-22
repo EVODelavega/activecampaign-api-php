@@ -20,6 +20,11 @@ class ActiveCampaign extends Connector
     const API_SECTION_USER = 10;
     const API_SECTION_WEBHOOK = 11;
     const API_SECTION_AUTOMATION = 12;
+    const API_SECTION_DEAL = 13;
+    const API_SECTION_ORGANIZATION = 14;
+    const API_SECTION_SETTINGS = 15;
+    const API_SECTION_TAG = 16;
+    const API_SECTION_SEGMENT = 17;
 
     private $apiSections = array(
         'Account',
@@ -34,7 +39,12 @@ class ActiveCampaign extends Connector
         'Tracking',
         'User',
         'Webhook',
-        'Automation'
+        'Automation',
+        'Deal',
+        'Organization',
+        'Settings',
+        'Tag',
+        'Segment'
     );
 
     public $version = 1;

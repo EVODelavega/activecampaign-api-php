@@ -4,10 +4,10 @@ use AC\Arguments\Config;
 include 'src/AC/config.php';
 $conf = new Config(
 	array(
-		'url'	=>  'yourURL',
-		'apiKey' => 'yourAPIKEY',
-		'apiUser'=> 'optionalUserName',
-		'apiPAss'=> 'andPassword'
+		'url'	=>  'https://yopmail85395.api-us1.com',
+		'apiKey' => '670e1beb2d0c58b7ce806d9665178fea772a2a27a49ad71cc724d5e9dc5fe159942ee675',
+		'apiUser'=> '',
+		'apiPAss'=> ''
 	)
 );
 	$ac = new ActiveCampaign($conf);
@@ -22,19 +22,19 @@ $conf = new Config(
 	}
 	else {
 		$out[] = 'Credentials valid! Proceeding...';
-		//echo "<p>Credentials valid! Proceeding...</p>";
+		echo "<p>Credentials valid! Proceeding...</p>";
 	}
 
 	/*
 	 * VIEW ACCOUNT DETAILS.
 	 */
 
-	$account = $ac->api("user/view?id=2");
+	$account = $ac->api("user/view?id=1");
 	$out[] = $account;
-	/*
+	
 	echo "<pre>";
 	print_r($account);
-	echo "</pre>";*/
+	echo "</pre>";
 
 	/*
 	 * ADD NEW LIST.
@@ -55,7 +55,7 @@ $conf = new Config(
 		// successful request
 		$list_id = (int)$list_add->id;
 		$out[] = 'List added successfully (ID '.$list_id.')!';
-		//echo "<p>List added successfully (ID {$list_id})!</p>";
+		echo "<p>List added successfully (ID {$list_id})!</p>";
 	}
 	else {
 		// request failed
@@ -68,7 +68,7 @@ $conf = new Config(
 	 */
 
 	$contact = array(
-		"email" => "test@example.com",
+		"email" => "testacravi@yopmail.com",
 		"first_name" => "Test",
 		"last_name" => "Test",
 		"p[{$list_id}]" => $list_id,
@@ -87,6 +87,81 @@ $conf = new Config(
 		echo "<p>Syncing contact failed. Error returned: " . $contact_sync->error . "</p>";
 		exit();
 	}
+
+
+	/*
+	 * ADD NEW PIPELINE for Deal.
+	 */
+	$pipeline = [
+				'title' => 'test pipeline',
+				'currency' => 'usd',
+				'autoassign' => 1,
+				'users' => [1]  //new need to set owners of this deal (person who created this Deal)
+			];
+
+	$pipeline_add = $ac->api("deal/pipeline_add", $pipeline);
+
+	if ((int)$pipeline_add->success) {
+
+		$pipelineId = $pipeline_add->id;
+		echo "<p>Pipeline added successfully (ID {$pipelineId})!</p>";
+	}
+	else {
+		// request failed
+		echo "<p>Adding pipeline failed. Error returned: " . $pipeline_add->error . "</p>";
+		exit();
+	}
+
+
+
+	/*
+	 * ADD NEW STAGE for Deal.
+	 */
+	$stage = [
+				'title' => 'test stage123',
+				'pipeline' => $pipelineId
+			];
+
+	$stage_add = $ac->api("deal/stage_add", $stage);
+	if ((int)$stage_add->success) {
+
+		$stageId = $stage_add->id;
+		echo "<p>Stage added successfully (ID {$stageId})!</p>";
+	}
+	else {
+		// request failed
+		echo "<p>Adding stage failed. Error returned: " . $stage_add->error . "</p>";
+		exit();
+	}
+
+	
+	/*
+	 * ADD NEW Deal.
+	 */
+	$deal = [
+				'title' => 'test deal',
+				'value' => '100',
+				'currency' => 'usd',
+				'pipeline' => $pipelineId,
+				'stage' => $stageId,
+				'contactid' => $contact_id,
+			];
+
+	$deal_add = $ac->api("deal/add", $deal);
+	if ((int)$deal_add->success) {
+		$dealId = $deal_add->id;
+		echo "<p>Deal added successfully (ID {$dealId})!</p>";
+		echo "<pre>";
+		print_r($deal_add);
+		echo "</pre>";
+	}
+	else {
+		// request failed
+		echo "<p>Adding deal failed. Error returned: " . $deal_add->error . "</p>";
+		exit();
+	}
+
+	
 
 	/*
 	 * ADD NEW EMAIL MESSAGE (FOR A CAMPAIGN).
@@ -121,16 +196,17 @@ $conf = new Config(
 	$campaign = array(
 		"type" => "single",
 		"name" => "July Campaign", // internal name (message subject above is what contacts see)
-		"sdate" => "2013-07-01 00:00:00",
+		"sdate" => "2020-07-01 00:00:00",
 		"status" => 1,
 		"public" => 1,
 		"tracklinks" => "all",
 		"trackreads" => 1,
 		"htmlunsub" => 1,
-		"p[{$list_id}]" => $list_id,
+		"p[{$list_id}]" => 13,
 		"m[{$message_id}]" => 100, // 100 percent of subscribers
 	);
 
+	
 	$campaign_create = $ac->api("campaign/create", $campaign);
 
 	if ((int)$campaign_create->success) {
