@@ -22,7 +22,7 @@ $conf = new Config(
 	}
 	else {
 		$out[] = 'Credentials valid! Proceeding...';
-		echo "<p>Credentials valid! Proceeding...</p>";
+		//echo "<p>Credentials valid! Proceeding...</p>";
 	}
 
 	/*
@@ -31,10 +31,10 @@ $conf = new Config(
 
 	$account = $ac->api("user/view?id=1");
 	$out[] = $account;
-	
+	/*
 	echo "<pre>";
 	print_r($account);
-	echo "</pre>";
+	echo "</pre>";*/
 
 	/*
 	 * ADD NEW LIST.
@@ -55,7 +55,7 @@ $conf = new Config(
 		// successful request
 		$list_id = (int)$list_add->id;
 		$out[] = 'List added successfully (ID '.$list_id.')!';
-		echo "<p>List added successfully (ID {$list_id})!</p>";
+		//echo "<p>List added successfully (ID {$list_id})!</p>";
 	}
 	else {
 		// request failed
@@ -68,7 +68,7 @@ $conf = new Config(
 	 */
 
 	$contact = array(
-		"email" => "testacravi@yopmail.com",
+		"email" => "test@example.com",
 		"first_name" => "Test",
 		"last_name" => "Test",
 		"p[{$list_id}]" => $list_id,
@@ -96,7 +96,7 @@ $conf = new Config(
 				'title' => 'test pipeline',
 				'currency' => 'usd',
 				'autoassign' => 1,
-				'users' => [1]  //new need to set owners of this deal (person who created this Deal)
+				'users' => [1]  //need to set owners of this deal (person who created this Deal)
 			];
 
 	$pipeline_add = $ac->api("deal/pipeline_add", $pipeline);
@@ -202,11 +202,10 @@ $conf = new Config(
 		"tracklinks" => "all",
 		"trackreads" => 1,
 		"htmlunsub" => 1,
-		"p[{$list_id}]" => 13,
+		"p[{$list_id}]" => $list_id,
 		"m[{$message_id}]" => 100, // 100 percent of subscribers
 	);
 
-	
 	$campaign_create = $ac->api("campaign/create", $campaign);
 
 	if ((int)$campaign_create->success) {
