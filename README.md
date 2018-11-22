@@ -4,7 +4,11 @@ This is a fork of the official PHP wrapper for the ActiveCampaign API and EVODel
 
 ### Installation
 
+```json
+
 composer require ravimadan/activecampaign-api-php
+
+```
 
 or
 
