@@ -4,10 +4,10 @@ use AC\Arguments\Config;
 include 'src/AC/config.php';
 $conf = new Config(
 	array(
-		'url'	=>  'https://yopmail85395.api-us1.com',
-		'apiKey' => '670e1beb2d0c58b7ce806d9665178fea772a2a27a49ad71cc724d5e9dc5fe159942ee675',
-		'apiUser'=> '',
-		'apiPAss'=> ''
+		'url'	=>  'yourURL',
+		'apiKey' => 'yourAPIKEY',
+		'apiUser'=> 'optionalUserName',
+		'apiPAss'=> 'andPassword'
 	)
 );
 	$ac = new ActiveCampaign($conf);
