@@ -29,7 +29,7 @@ $conf = new Config(
 	 * VIEW ACCOUNT DETAILS.
 	 */
 
-	$account = $ac->api("user/view?id=2");
+	$account = $ac->api("user/view?id=1");
 	$out[] = $account;
 	/*
 	echo "<pre>";
@@ -88,6 +88,81 @@ $conf = new Config(
 		exit();
 	}
 
+
+	/*
+	 * ADD NEW PIPELINE for Deal.
+	 */
+	$pipeline = [
+				'title' => 'test pipeline',
+				'currency' => 'usd',
+				'autoassign' => 1,
+				'users' => [1]  //need to set owners of this deal (person who created this Deal)
+			];
+
+	$pipeline_add = $ac->api("deal/pipeline_add", $pipeline);
+
+	if ((int)$pipeline_add->success) {
+
+		$pipelineId = $pipeline_add->id;
+		echo "<p>Pipeline added successfully (ID {$pipelineId})!</p>";
+	}
+	else {
+		// request failed
+		echo "<p>Adding pipeline failed. Error returned: " . $pipeline_add->error . "</p>";
+		exit();
+	}
+
+
+
+	/*
+	 * ADD NEW STAGE for Deal.
+	 */
+	$stage = [
+				'title' => 'test stage123',
+				'pipeline' => $pipelineId
+			];
+
+	$stage_add = $ac->api("deal/stage_add", $stage);
+	if ((int)$stage_add->success) {
+
+		$stageId = $stage_add->id;
+		echo "<p>Stage added successfully (ID {$stageId})!</p>";
+	}
+	else {
+		// request failed
+		echo "<p>Adding stage failed. Error returned: " . $stage_add->error . "</p>";
+		exit();
+	}
+
+	
+	/*
+	 * ADD NEW Deal.
+	 */
+	$deal = [
+				'title' => 'test deal',
+				'value' => '100',
+				'currency' => 'usd',
+				'pipeline' => $pipelineId,
+				'stage' => $stageId,
+				'contactid' => $contact_id,
+			];
+
+	$deal_add = $ac->api("deal/add", $deal);
+	if ((int)$deal_add->success) {
+		$dealId = $deal_add->id;
+		echo "<p>Deal added successfully (ID {$dealId})!</p>";
+		echo "<pre>";
+		print_r($deal_add);
+		echo "</pre>";
+	}
+	else {
+		// request failed
+		echo "<p>Adding deal failed. Error returned: " . $deal_add->error . "</p>";
+		exit();
+	}
+
+	
+
 	/*
 	 * ADD NEW EMAIL MESSAGE (FOR A CAMPAIGN).
 	 */
@@ -121,7 +196,7 @@ $conf = new Config(
 	$campaign = array(
 		"type" => "single",
 		"name" => "July Campaign", // internal name (message subject above is what contacts see)
-		"sdate" => "2013-07-01 00:00:00",
+		"sdate" => "2020-07-01 00:00:00",
 		"status" => 1,
 		"public" => 1,
 		"tracklinks" => "all",
